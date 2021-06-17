@@ -1,0 +1,387 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" media="all" href="https://webslides.tv/static/css/webslides.css">
+		<link rel="stylesheet" type="text/css" media="all" href="https://webslides.tv/static/css/svg-icons.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,700,700i%7CMaitree:200,300,400,600,700&subset=latin-ext" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/vs2015.min.css">
+<style>
+html { font-size: 16px; }
+pre { white-space: pre-line; }
+
+.centered { display: block; margin: 0 auto; }
+.footnote { font-style: italic; }
+.column ul li { list-style: circle; }
+.code {
+	white-space: pre;
+	font-family: monospace;
+	padding: 2rem;
+	border-radius: 1rem;
+	font-size: 1.2rem;
+	line-height: 1.8rem;
+}
+</style>
+	</head>
+
+	<body>
+		<article id="webslides" class="vertical">
+			<section>
+				<div class="wrap">
+					<div class="aligncenter">
+						<h1>Server-side Web Programming 101</h1>
+						<p>Concepts and demos with Node.js</p>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap fadeInUp">
+					<h2 class="aligncenter">Agenda</h2>
+					<div class="centered" style="width: 560px">
+						<ul>
+							<li>Server-side vs client-side</li>
+							<li>URLs and the HTTP protocol</li>
+							<li>Node.js: the server-side JavaScript</li>
+							<li>Demo 1: a simple server-side Node.js application</li>
+							<li>Server-side web frameworks</li>
+							<li>Demo 2: APIs with express.js</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Static Sites</h2>
+					<a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Introduction" target="_blank"><img class="centered" src="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Introduction/basic_static_app_server.png"></a>
+					<p class="aligncenter footnote">Source: MDN</p>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Dynamic Sites</h2>
+					<a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Introduction" target="_blank"><img class="centered" src="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Introduction/web_application_with_html_and_steps.png"></a>
+					<p class="aligncenter footnote">Source: MDN</p>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<div class="grid">
+						<div class="column">
+							<h2 class="aligncenter">Client-side Programming</h2>
+							<div class="centered" style="width: 80%">
+								<ul>
+									<li>Written using HTML, CSS and JavaScript.</li>
+									<li>Run inside a web browser.</li>
+									<li>Has little or no access to the underlying OS.</li>
+									<li>To improve the appearance and behavior.</li>
+								</ul>
+							</div>
+						</div>
+						<div class="column">
+							<h2 class="aligncenter">Server-side Programming</h2>
+							<div class="centered" style="width: 80%">
+							<ul>
+								<li>Written in any number of programming languages.</li>
+								<li>Developer can choose the runtime, both the programming language and the specific version.</li>
+								<li>Has full access to the OS.</li>
+								<li>To deliver information.</li>
+							</ul>
+						</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Anatomy of a URL</h2>
+					<a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL" target="_blank"><img class="centered" src="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL/mdn-url-all.png"></a>
+					<p class="aligncenter footnote">Source: MDN</p>
+				</div>
+			</section>
+
+			<section class="aligncenter">
+				<div class="wrap">
+					<h2>HTTP Request</h2>
+					<div class="content-center">
+						<pre>
+							GET http://developer.mozilla.org HTTP/1.1
+							Host: developer.mozilla.org
+						</pre>
+					</div>
+				</div>
+			</section>
+
+			<section class="aligncenter">
+				<div class="wrap">
+					<h2>HTTP Response</h2>
+					<div class="content-center">
+						<pre>
+							HTTP/1.1 200 OK
+							Date: Sat, 09 Oct 2010 14:28:02 GMT
+							Server: Apache
+							Last-Modified: Tue, 01 Dec 2009 20:18:22 GMT
+							ETag: "51142bc1-7449-479b075b2891b"
+							Accept-Ranges: bytes
+							Content-Length: 29769
+							Content-Type: text/html
+
+							&lt;!DOCTYPE html... (here comes the 29769 bytes of the requested web page)
+						</pre>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<div class="grid">
+						<div class="column">
+							<h2 class="aligncenter">HTTP Debugger</h2>
+							<div class="centered" style="width: 50%">
+								<ul>
+									<li>Fiddler</li>
+									<li>Postman</li>
+									<li>Editors (with plugins): VS Code, etc.</li>
+								</ul>
+							</div>
+						</div>
+						<div class="column">
+							<h2 class="aligncenter">Standards</h2>
+							<div class="centered" style="width: 50%">
+								<ul>
+									<li>RFC 2616: HTTP 1.1</li>
+									<li>RFC 6265: State Management</li>
+									<li>RFC 6455: WebSocket</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Server-side Programming Languages</h2>
+					<div class="centered" style="width: 30%">
+						<ul>
+							<li>PHP</li>
+							<li>Java</li>
+							<li>Ruby</li>
+							<li>Python</li>
+							<li>JavaScript (Node.js)</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">JavaScript Engine History</h2>
+					<div class="centered" style="width: 30%">
+						<ul>
+							<li>1995: Netscape</li>
+							<li>2008: V8</li>
+							<li>2009: Node.js</li>
+							<li>2019: QuickJS</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Client-side vs Server-side JavaScript</h2>
+					<div class="centered" style="width: 30%">
+						<ul>
+							<li><strong>Core</strong> JavaScript: the base JavaScript Language, ECMAScript.</li>
+							<li><strong>Client-side</strong> JavaScript: an extended version of JavaScript that enables the enhancement and manipulation of web pages and client browsers.</li>
+							<li><strong>Server-side</strong> JavaScript: an extended version of JavaScript that enables back-end access to databases, file systems and servers.</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<div class="grid">
+						<div class="column">
+							<h2 class="aligncenter">Demo: Node.js Helloworld</h2>
+							<div>
+								<ol>
+									<li>Import the HTTP module;</li>
+									<li>Create a server and listen on a port and hostname;</li>
+									<li>Handle a request, and provide a response.</li>
+								</ol>
+							</div>
+						</div>
+						<div class="column">
+							<div class="code language-javascript">// Load HTTP module
+const http = require("http");
+
+// Define a few constants
+const hostname = "127.0.0.1";
+const port = 8000;
+const html = `&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;hello&lt;/title&gt;
+  &lt;head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;world&lt;h1&gt;
+  &lt;body&gt;
+&lt;html&gt;`;
+
+// Create HTTP server
+const server = http.createServer((req, res) =&gt; {
+  // Set the response HTTP header wither HTTP status and Content type
+  res.writeHead(200, {"Content-Type": "text/html"});
+
+  // Send the response body
+  res.end(html);
+});
+
+// Print a log once the server starts listening
+server.listen(port, hostname, () =&gt; {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Use a Web Framework</h2>
+					<p class="aligncenter">to avoid reinventing the wheel</p>
+					<div class="centered" style="width: 560px">
+						<ul>
+							<li>Routes</li>
+							<li>Static files</li>
+							<li>Template engines</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Server-side frameworks</h2>
+					<div class="centered" style="width: 560px">
+						<ul>
+							<li>PHP: a lot...</li>
+							<li>Java: Spring Boot</li>
+							<li>Ruby: Ruby on Rails</li>
+							<li>Python: Django, Flask</li>
+							<li>Node.js: express</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<div class="grid">
+						<div class="column">
+							<h2 class="aligncenter">Node.js</h2>
+							<div class="code language-javascript">// Load HTTP module
+const http = require("http");
+
+// Define a few constants
+const hostname = "127.0.0.1";
+const port = 8000;
+const html = `&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;hello&lt;/title&gt;
+  &lt;head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;world&lt;h1&gt;
+  &lt;body&gt;
+&lt;html&gt;`;
+
+// Create HTTP server
+const server = http.createServer((req, res) =&gt; {
+  // Set the response HTTP header wither HTTP status and Content type
+  res.writeHead(200, {"Content-Type": "text/html"});
+
+  // Send the response body
+  res.end(html);
+});
+
+// Print a log once the server starts listening
+server.listen(port, hostname, () =&gt; {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});</div>
+						</div>
+						<div class="column">
+							<h2 class="aligncenter">Express</h2>
+							<div class="code language-javascript">// Load express module
+const express = require("express");
+
+const app = express();
+const port = 8000;
+const html = `&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;hello&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;world&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;`;
+
+app.get("/", (req, res) =&gt; {
+  res.send(html);
+});
+
+app.listen(port, () =&gt; {
+  console.log(`Express listening on port ${port}`);
+});</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">Demo 2: APIs with express.js</h2>
+				</div>
+			</section>
+
+			<section>
+				<div class="wrap">
+					<h2 class="aligncenter">What have we talked today?</h2>
+					<div class="centered" style="width: 560px">
+						<ul>
+							<li>Server-side programming: concepts, languages, frameworks.</li>
+							<li>URLs and the HTTP protocol.</li>
+							<li>Implementing and debugging a helloworld JSON RESTful API.</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</article>
+		<script src="https://webslides.tv/static/js/webslides.js"></script>
+		<script src="https://webslides.tv/static/js/svg-icons.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+
+		<script>
+			window.ws = new WebSlides();
+			document.addEventListener("DOMContentLoaded", event => {
+				document.querySelectorAll("pre code").forEach(el => {
+					hljs.highlightElement(el);
+				});
+
+				document.querySelectorAll(".code").forEach(el => {
+					hljs.highlightElement(el);
+				});
+			});
+		</script>
+	</body>
+</html>
+
